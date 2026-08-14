@@ -5,13 +5,8 @@ on:
 
 jobs:
   build-android-apk:
-    name: 构建 Android 未签名 APK
+    name: 构建 Android APK
     runs-on: ubuntu-latest
-
-    defaults:
-      run:
-        shell: bash
-        working-directory: wangwang_phone
 
     steps:
       - name: 拉取代码
@@ -22,13 +17,13 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
-     
+
       - name: 安装 Flutter
         uses: subosito/flutter-action@v2
         with:
-        channel: stable
-        cache: true
-        flutter-version: '3.27.4'
+          flutter-version: '3.27.4'
+          channel: stable
+          cache: true
 
       - name: 输出 Flutter 版本
         run: flutter --version
@@ -39,13 +34,11 @@ jobs:
       - name: 执行静态检查
         run: flutter analyze
 
-      - name: 构建 Android 未签名 APK
+      - name: 构建 Android APK
         run: flutter build apk --release
 
-      - name: 上传 Android APK 制品
+      - name: 上传 APK 产物
         uses: actions/upload-artifact@v4
         with:
-          name: wangwang-phone-android-apk
-          path: wangwang_phone/build/app/outputs/flutter-apk/app-release.apk
-          if-no-files-found: error
-          retention-days: 14
+          name: app-release
+          path: build/app/outputs/flutter-apk/app-release.apk
